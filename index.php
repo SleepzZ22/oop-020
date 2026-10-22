@@ -186,43 +186,87 @@ $baseUrl =$protocol . "://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_U
     <title>PHP OOP Real-time - URL Shortener Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Prompt', sans-serif; background: #0f172a; color: #f8fafc; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        body { 
+            font-family: 'Prompt', sans-serif; 
+            background: radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.12) 0%, transparent 40%),
+                        radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.10) 0%, transparent 45%),
+                        #070d18; 
+            color: #f1f5f9; 
+            min-height: 100vh;
+        }
+        .font-code {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .glass-panel { 
+            background: rgba(15, 23, 42, 0.78); 
+            backdrop-filter: blur(16px); 
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(6, 182, 212, 0.22); 
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 25px -5px rgba(6, 182, 212, 0.14);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover {
+            border-color: rgba(6, 182, 212, 0.4);
+            box-shadow: 0 16px 36px -5px rgba(0, 0, 0, 0.7), 0 0 32px -3px rgba(6, 182, 212, 0.24);
+        }
+        .glow-btn {
+            background: linear-gradient(135deg, #06b6d4 0%, #0ea5e9 50%, #10b981 100%);
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.35);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glow-btn:hover {
+            box-shadow: 0 6px 28px rgba(16, 185, 129, 0.45);
+            transform: translateY(-1.5px);
+        }
+        .glow-btn:active {
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body class="p-4 md:p-8 min-h-screen">
 
     <div class="max-w-4xl mx-auto space-y-6">
         <!-- Header -->
-        <header class="text-center space-y-2">
-            <span class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full text-xs font-semibold border border-indigo-500/30">
-                <i class="fa-brands fa-php text-lg"></i> PHP OOP + Real-time Syncing
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <header class="text-center space-y-3 pt-2">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-cyan-500/10 text-cyan-400 rounded-full text-xs font-semibold border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.18)]">
+                <i class="fa-brands fa-php text-lg text-cyan-400"></i> PHP OOP + Real-time Syncing
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></span>
             </span>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 tracking-tight drop-shadow-sm">
                 ระบบย่อลิงก์ & สถิติแบบ Real-time
             </h1>
-            <p class="text-slate-400 text-sm">
-                3 คลาสหลัก: <code class="text-indigo-300">UrlEncoder</code>, <code class="text-purple-300">LinkItem</code>, <code class="text-pink-300">RedirectManager</code>
+            <p class="text-slate-400 text-sm flex items-center justify-center gap-2 flex-wrap">
+                <span>3 คลาสหลัก:</span>
+                <code class="text-cyan-300 bg-cyan-950/60 px-2.5 py-0.5 rounded border border-cyan-800/60 shadow-sm text-xs font-code">UrlEncoder</code>
+                <code class="text-teal-300 bg-teal-950/60 px-2.5 py-0.5 rounded border border-teal-800/60 shadow-sm text-xs font-code">LinkItem</code>
+                <code class="text-emerald-300 bg-emerald-950/60 px-2.5 py-0.5 rounded border border-emerald-800/60 shadow-sm text-xs font-code">RedirectManager</code>
             </p>
         </header>
 
         <!-- Notification Toast -->
         <div id="toast" class="hidden p-4 rounded-xl flex items-center gap-3 transition-all">
             <i id="toastIcon" class="text-xl"></i>
-            <span id="toastMsg"></span>
+            <span id="toastMsg" class="font-medium text-sm"></span>
         </div>
 
         <!-- Form Input -->
-        <section class="glass rounded-2xl p-6 shadow-xl">
+        <section class="glass-panel rounded-2xl p-6">
             <form id="shortenForm" class="space-y-3">
-                <label class="block text-sm font-medium text-slate-300">ใส่ URL ต้นฉบับที่ต้องการย่อ</label>
+                <label class="block text-sm font-medium text-slate-300 flex items-center gap-2">
+                    <i class="fa-solid fa-link text-cyan-400"></i>
+                    <span>ใส่ URL ต้นฉบับที่ต้องการย่อ</span>
+                </label>
                 <div class="flex flex-col sm:flex-row gap-3">
-                    <input type="url" id="urlInput" required placeholder="https://example.com/very-long-path..." 
-                        class="flex-grow px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 py-3 rounded-xl flex items-center justify-center gap-2 transition-all cursor-pointer">
+                    <div class="relative flex-grow">
+                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <input type="url" id="urlInput" required placeholder="https://example.com/very-long-path..." 
+                            class="w-full pl-10 pr-4 py-3 bg-slate-900/85 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/30 focus:shadow-[0_0_20px_rgba(6,182,212,0.22)] transition-all">
+                    </div>
+                    <button type="submit" class="glow-btn text-slate-950 font-bold px-7 py-3 rounded-xl flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-scissors"></i>
                         <span>ย่อลิงก์</span>
                     </button>
@@ -231,28 +275,28 @@ $baseUrl =$protocol . "://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_U
         </section>
 
         <!-- Table Stats -->
-        <section class="glass rounded-2xl p-6 shadow-xl space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
-                <h2 class="text-lg font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-chart-line text-indigo-400"></i>
-                    สถิติการใช้งานแบบ Real-time
+        <section class="glass-panel rounded-2xl p-6 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h2 class="text-lg font-bold flex items-center gap-2.5 text-white">
+                    <i class="fa-solid fa-chart-line text-cyan-400"></i>
+                    <span>สถิติการใช้งานแบบ Real-time</span>
                 </h2>
-                <span id="linkCountBadge" class="bg-indigo-500/20 text-indigo-300 text-xs px-3 py-1 rounded-full border border-indigo-500/30">
+                <span id="linkCountBadge" class="bg-cyan-500/15 text-cyan-300 text-xs px-3.5 py-1 rounded-full border border-cyan-500/30 shadow-[0_0_12px_rgba(6,182,212,0.15)] font-semibold">
                     0 ลิงก์
                 </span>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
                 <table class="w-full text-left text-sm text-slate-300">
-                    <thead class="bg-slate-800 text-xs uppercase text-slate-400">
+                    <thead class="bg-slate-900/90 text-xs uppercase text-cyan-300/80 tracking-wider">
                         <tr>
-                            <th class="py-3 px-4">Code</th>
-                            <th class="py-3 px-4">URL ต้นฉบับ</th>
-                            <th class="py-3 px-4 text-center">จำนวนคลิก</th>
-                            <th class="py-3 px-4 text-center">จัดการ</th>
+                            <th class="py-3.5 px-4">Code</th>
+                            <th class="py-3.5 px-4">URL ต้นฉบับ</th>
+                            <th class="py-3.5 px-4 text-center">จำนวนคลิก</th>
+                            <th class="py-3.5 px-4 text-center">จัดการ</th>
                         </tr>
                     </thead>
-                    <tbody id="linksTableBody" class="divide-y divide-slate-800">
+                    <tbody id="linksTableBody" class="divide-y divide-slate-800/70 bg-slate-950/40">
                         <!-- Render Real-time via JavaScript -->
                     </tbody>
                 </table>
@@ -294,29 +338,32 @@ $baseUrl =$protocol . "://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_U
             tbody.innerHTML = links.map(link => {
                 const shortUrl = `${baseUrl}?c=${link.shortCode}`;
                 return `
-                    <tr class="hover:bg-slate-800/50 transition-colors">
-                        <td class="py-3 px-4 font-mono text-indigo-400 font-semibold">
-                            <span class="bg-indigo-950 px-2.5 py-1 rounded border border-indigo-800/60">
+                    <tr class="hover:bg-cyan-950/20 transition-all">
+                        <td class="py-3.5 px-4 font-mono">
+                            <span class="bg-cyan-950/70 text-cyan-300 px-3 py-1 rounded-lg border border-cyan-500/35 font-semibold text-xs tracking-wider shadow-[0_0_10px_rgba(6,182,212,0.15)] inline-block">
                                 ${link.shortCode}
                             </span>
                         </td>
-                        <td class="py-3 px-4 max-w-xs truncate text-slate-300" title="${link.originalUrl}">
-                            ${link.originalUrl}
+                        <td class="py-3.5 px-4 max-w-xs truncate text-slate-300" title="${link.originalUrl}">
+                            <a href="${link.originalUrl}" target="_blank" class="hover:text-cyan-300 hover:underline transition-colors">
+                                ${link.originalUrl}
+                            </a>
                         </td>
-                        <td class="py-3 px-4 text-center">
-                            <span class="px-2.5 py-1 bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20 font-bold text-xs transition-all">
-                                <i class="fa-solid fa-mouse-pointer mr-1 text-xs"></i> ${link.clicks} คลิก
+                        <td class="py-3.5 px-4 text-center">
+                            <span class="px-3 py-1 bg-amber-500/15 text-amber-300 rounded-full border border-amber-500/30 font-bold text-xs shadow-[0_0_12px_rgba(245,158,11,0.15)] inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-fire text-amber-400 text-xs"></i>
+                                <span>${link.clicks} คลิก</span>
                             </span>
                         </td>
-                        <td class="py-3 px-4 text-center">
+                        <td class="py-3.5 px-4 text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="copyLink('${shortUrl}')" class="p-2 bg-slate-700 hover:bg-indigo-600 rounded-lg text-white" title="คัดลอกลิงก์">
+                                <button onclick="copyLink('${shortUrl}')" class="p-2 bg-slate-800 hover:bg-cyan-600 rounded-lg text-slate-300 hover:text-white shadow-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] transition-all cursor-pointer" title="คัดลอกลิงก์">
                                     <i class="fa-solid fa-copy"></i>
                                 </button>
-                                <a href="${shortUrl}" target="_blank" class="p-2 bg-slate-700 hover:bg-emerald-600 rounded-lg text-white" title="ทดสอบเปิดลิงก์">
+                                <a href="${shortUrl}" target="_blank" class="p-2 bg-slate-800 hover:bg-emerald-600 rounded-lg text-slate-300 hover:text-white shadow-sm hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all cursor-pointer" title="ทดสอบเปิดลิงก์">
                                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>
-                                <button onclick="deleteLink('${link.shortCode}')" class="p-2 bg-slate-700 hover:bg-rose-600 rounded-lg text-white" title="ลบลิงก์">
+                                <button onclick="deleteLink('${link.shortCode}')" class="p-2 bg-slate-800 hover:bg-rose-600 rounded-lg text-slate-300 hover:text-white shadow-sm hover:shadow-[0_0_15px_rgba(244,63,94,0.4)] transition-all cursor-pointer" title="ลบลิงก์">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
                             </div>
@@ -375,11 +422,11 @@ $baseUrl =$protocol . "://" . $_SERVER['HTTP_HOST'] . strtok($_SERVER["REQUEST_U
 
             toastMsg.textContent = message;
             if (isError) {
-                toast.className = "p-4 rounded-xl flex items-center gap-3 bg-rose-500/20 border border-rose-500/40 text-rose-300";
-                toastIcon.className = "fa-solid fa-circle-exclamation";
+                toast.className = "p-4 rounded-xl flex items-center gap-3 bg-rose-950/90 border border-rose-500/50 text-rose-300 shadow-[0_10px_25px_rgba(244,63,94,0.25)] backdrop-blur-md";
+                toastIcon.className = "fa-solid fa-circle-exclamation text-rose-400";
             } else {
-                toast.className = "p-4 rounded-xl flex items-center gap-3 bg-emerald-500/20 border border-emerald-500/40 text-emerald-300";
-                toastIcon.className = "fa-solid fa-circle-check";
+                toast.className = "p-4 rounded-xl flex items-center gap-3 bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 shadow-[0_10px_25px_rgba(16,185,129,0.25)] backdrop-blur-md";
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400";
             }
 
             toast.classList.remove('hidden');
